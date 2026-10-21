@@ -1,6 +1,6 @@
 # תוכנית – Milestone 1: בסיס אפליקציה ושני מסכים מעוצבים
 
-> מקורות: `MILESTONES.md` (Milestone 1), `PRD.md`, `ARCHITECTURE.md` (כולל ADR-1, ADR-2, ADR-8), `DESIGN.md` ושלוש התמונות ב-`spec/`.
+> מקורות: `MILESTONES.md` (Milestone 1), `PRD.md`, `ARCHITECTURE.md` (כולל ADR-1, ADR-2, ADR-8), `DESIGN.md` ושלוש התמונות שבשורש הפרויקט.
 > תוכנית זו לבנייה בלבד. אחרי הבנייה הקוד ו-`MILESTONES.md` הם מקור האמת.
 
 ## 1. המטרה בקצרה
@@ -15,7 +15,7 @@
 
 1. לבדוק ש-Node.js מותקן במחשב (`node -v`, `npm -v`), בגרסת LTS שמתאימה לגרסת Vite שתותקן.
    אם Node חסר או ישן מדי: **לעצור** ולהדריך את המשתמש בשפה פשוטה, צעד אחר צעד, להתקין Node.js LTS מהאתר הרשמי (nodejs.org).
-2. שורש הפרויקט הוא תיקיית `simon` (שבה נמצאים `CLAUDE.md` ו-`spec/`). הקוד נוצר שם, לא בתוך `spec/`.
+2. שורש הפרויקט הוא התיקייה `Simon`, שבה נמצאים `CLAUDE.md`, מסמכי ה-spec והתמונות. הקוד נוצר שם, לצד המסמכים.
 3. **Git:** לא מריצים `git init`, `commit` או `push` ב-Milestone הזה. ה-repo נוצר ומחובר ל-GitHub בשלב "דחיפה" לפי `CLAUDE.md`, אחרי האישור.
 4. **`.env`:** לפרויקט אין מפתחות או הגדרות סודיות, ולכן **לא** יוצרים `.env.example` ו-`.env`.
 5. **`.gitignore`:** כבר מכסה `node_modules/` ו-`dist/`. לא נדרש שינוי.
@@ -38,7 +38,7 @@
 ## 4. הקבצים ליצור
 
 ```text
-simon/
+Simon/
 ├── package.json
 ├── package-lock.json            (נוצר ע"י npm)
 ├── index.html
@@ -70,7 +70,7 @@ simon/
         └── setup.ts
 ```
 
-קבצים קיימים שמתעדכנים בסוף הבנייה: `CLAUDE.md` (סעיף "פקודות הרצה" בלבד) ו-`spec/MILESTONES.md` (סימון 🟡 ליד כותרת Milestone 1 בלבד).
+קבצים קיימים שמתעדכנים בסוף הבנייה: `CLAUDE.md` (סעיף "פקודות הרצה" בלבד) ו-`MILESTONES.md` (סימון 🟡 ליד כותרת Milestone 1 בלבד).
 
 ## 5. פירוט לפי קובץ
 
@@ -245,7 +245,7 @@ export const BOARD_COLORS: ReadonlyArray<{
 5. לעדכן את `CLAUDE.md`, סעיף "פקודות הרצה":
    - **הרצה (dev):** `npm run dev`, ואז לפתוח `http://localhost:5173/Simon/`
    - **בדיקות (test):** `npm run test`
-6. לסמן 🟡 ליד הכותרת של Milestone 1 ב-`spec/MILESTONES.md`. בלי commit.
+6. לסמן 🟡 ליד הכותרת של Milestone 1 ב-`MILESTONES.md`. בלי commit.
 
 ## 8. Definition of Done – איך כל תנאי נבדק
 
