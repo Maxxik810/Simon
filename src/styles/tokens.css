@@ -1,0 +1,37 @@
+/* Design tokens from DESIGN.md section 2 */
+:root {
+  /* Game colors */
+  --color-green: #00d26a;
+  --color-red: #ff3b30;
+  --color-yellow: #ffd600;
+  --color-blue: #00a3ff;
+
+  /* Neutrals */
+  --color-charcoal: #0f0f0f;
+  --color-soft-gray: #e5e5e5;
+  --color-white: #ffffff;
+
+  /* Dark theme surfaces (from the mockups) */
+  --color-bg: #0a1628;
+  --color-surface: #12213a;
+  --color-border: #1e3556;
+
+  /* Spacing scale */
+  --space-1: 8px;
+  --space-2: 12px;
+  --space-3: 16px;
+  --space-4: 24px;
+
+  /* Typography */
+  --font-family: 'Heebo', Arial, sans-serif;
+  --fs-h1: 32px;
+  --fs-h2: 24px;
+  --fs-h3: 20px;
+  --fs-body: 16px;
+  --fs-caption: 14px;
+  --fs-button: 16px;
+
+  /* Shapes */
+  --radius-card: 16px;
+  --radius-button: 999px;
+}

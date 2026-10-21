@@ -1,0 +1,24 @@
+.home {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  text-align: center;
+}
+
+.home__stage {
+  margin-top: var(--space-3);
+  font-size: var(--fs-h3);
+  font-weight: 600;
+}
+
+.home__status {
+  min-height: 24px;
+  margin: var(--space-1) 0 var(--space-2);
+  color: var(--color-soft-gray);
+}
+
+.home__actions {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-4);
+}
