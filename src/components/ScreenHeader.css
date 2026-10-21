@@ -1,0 +1,27 @@
+.screen-header {
+  position: relative;
+  padding: var(--space-4) 0 var(--space-2);
+  border-bottom: 1px solid var(--color-border);
+  text-align: center;
+}
+
+.screen-header__title {
+  font-size: var(--fs-h1);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* Thin arch behind the top of the screen; never affects layout or input */
+.screen-header__arch {
+  position: absolute;
+  top: 6px;
+  inset-inline: 6%;
+  height: 340px;
+  z-index: -1;
+  border: 1px solid var(--color-border);
+  border-bottom: none;
+  border-radius: 50% 50% 0 0 / 45% 45% 0 0;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent);
+  mask-image: linear-gradient(to bottom, #000 55%, transparent);
+}

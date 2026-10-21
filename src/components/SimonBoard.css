@@ -1,0 +1,80 @@
+.board {
+  position: relative;
+  /* Fits a 375x667 phone together with the header, stage text, button and nav */
+  width: min(84vw, 340px);
+  width: min(84vw, 44dvh, 340px);
+  aspect-ratio: 1;
+  margin: 0 auto;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas:
+    'top-left top-right'
+    'bottom-left bottom-right';
+  gap: 10px;
+  /* Color positions are spatial and must not flip in RTL (ADR-1) */
+  direction: ltr;
+  border-radius: 50%;
+  background: var(--color-charcoal);
+  border: 3px solid var(--color-border);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.45);
+}
+
+.board__quadrant {
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  box-shadow: inset 0 -8px 16px rgba(0, 0, 0, 0.18);
+}
+
+.board__quadrant[data-position='top-left'] {
+  grid-area: top-left;
+  border-top-left-radius: 100%;
+}
+
+.board__quadrant[data-position='top-right'] {
+  grid-area: top-right;
+  border-top-right-radius: 100%;
+}
+
+.board__quadrant[data-position='bottom-left'] {
+  grid-area: bottom-left;
+  border-bottom-left-radius: 100%;
+}
+
+.board__quadrant[data-position='bottom-right'] {
+  grid-area: bottom-right;
+  border-bottom-right-radius: 100%;
+}
+
+.board__quadrant[data-color='green'] {
+  background: var(--color-green);
+}
+
+.board__quadrant[data-color='red'] {
+  background: var(--color-red);
+}
+
+.board__quadrant[data-color='yellow'] {
+  background: var(--color-yellow);
+}
+
+.board__quadrant[data-color='blue'] {
+  background: var(--color-blue);
+}
+
+/* Decorative center disk: no content and no input */
+.board__center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 30%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: var(--color-bg);
+  border: 3px solid var(--color-border);
+  box-shadow: 0 0 0 6px var(--color-charcoal);
+  pointer-events: none;
+}
