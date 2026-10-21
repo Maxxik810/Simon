@@ -2,10 +2,10 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// The site is served from https://<user>.github.io/Simon/ (see ADR-8),
+// The site is served from https://<user>.github.io/simon/ (see ADR-8, ADR-10),
 // so the same base path is used in every environment.
 export default defineConfig({
-  base: '/Simon/',
+  base: '/simon/',
   plugins: [react()],
   test: {
     environment: 'jsdom',

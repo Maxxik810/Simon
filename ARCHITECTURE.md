@@ -273,3 +273,8 @@ type HistoryData = {
 **הקשר:** ב-Chrome לאנדרואיד הופיעה הודעה שהאפליקציה "כבר מותקנת" למרות שלא הותקנה, ופתיחתה נכשלה ("Could not open app"), גם אחרי ניקוי נתוני האתר. ללא `id`, הדפדפן מזהה את האפליקציה לפי `start_url`, ולכן רישום התקנה ישן ושגוי במכשיר נצמד לאותה כתובת. המשתמש ביקש גם ששם האפליקציה המותקנת יהיה באנגלית.
 **החלטה:** הוספת `id: '/Simon/app'` ל-Manifest, ושינוי `name`/`short_name` ל-`Simon`. כותרת המסך ו-`<title>` נשארים "סיימון".
 **השלכות:** הדפדפן רואה את האפליקציה כזהות חדשה ומתעלם מרישום ישן. אסור לשנות את ה-`id` בעתיד, אחרת התקנות קיימות ייחשבו לאפליקציה אחרת.
+
+### ADR-10: נתיב בסיס `/simon/` והקדמת הפרסום ל-GitHub Pages
+**הקשר:** ה-Repository בפועל נקרא `simon` (s קטנה), ולא `Simon` כפי שהניחו ADR-8 וסעיף הפריסה. נתיב GitHub Pages רגיש לאותיות, ולכן `base: '/Simon/'` היה גורם ל-404 לנכסים. בנוסף, המשתמש ביקש לפרסם ל-Pages כבר אחרי Milestone 1.
+**החלטה:** `base: '/simon/'` ב-`vite.config.ts` (מחליף את הקבוע של ADR-8). ה-Workflow `.github/workflows/deploy.yml` (typecheck, בדיקות, Build ופריסה של `dist/` ל-Pages בכל Push ל-`main`) נוסף כבר עכשיו. PWA, Manifest ו-Service Worker נשארים ל-Milestone 5.
+**השלכות:** כתובת Production: `https://maxxik810.github.io/simon/`; כתובת מקומית: `http://localhost:5173/simon/`. ב-Milestone 5 יש לגזור את `start_url`, `scope` ו-`id` של ה-Manifest מ-`/simon/` (ADR-9 נכתב עם `/Simon/app`).
