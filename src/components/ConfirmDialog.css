@@ -1,0 +1,57 @@
+.confirm__scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3);
+  background: rgba(0, 0, 0, 0.65);
+}
+
+.confirm {
+  width: 100%;
+  max-width: 340px;
+  padding: var(--space-4) var(--space-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  text-align: center;
+}
+
+.confirm__title {
+  margin-bottom: var(--space-1);
+  font-size: var(--fs-h3);
+  font-weight: 700;
+}
+
+.confirm__text {
+  margin-bottom: var(--space-4);
+  color: var(--color-soft-gray);
+}
+
+.confirm__actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.confirm__btn {
+  flex: 1;
+  min-height: 48px;
+  border-radius: var(--radius-button);
+  font-size: var(--fs-button);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.confirm__btn--cancel {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-soft-gray);
+}
+
+.confirm__btn--delete {
+  background: var(--color-red);
+  border: none;
+  color: var(--color-white);
+}

@@ -7,9 +7,10 @@ import './HomeScreen.css';
 
 type HomeScreenProps = {
   game: GameController;
+  saveError: boolean;
 };
 
-export default function HomeScreen({ game }: HomeScreenProps) {
+export default function HomeScreen({ game, saveError }: HomeScreenProps) {
   const { state, roundComplete, litColor, resultVisible, audioError } = game;
   const { status } = state;
   const ended = status === 'won' || status === 'lost';
@@ -67,6 +68,12 @@ export default function HomeScreen({ game }: HomeScreenProps) {
         )}
         {hintText && <p className="home__hint">{hintText}</p>}
       </div>
+
+      {ended && saveError && (
+        <p className="home__error" role="alert">
+          לא הצלחנו לשמור את תוצאת המשחק.
+        </p>
+      )}
 
       {(status === 'idle' || status === 'paused') && audioError && (
         <p className="home__error" role="alert">

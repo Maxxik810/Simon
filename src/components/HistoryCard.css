@@ -1,0 +1,38 @@
+.history-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  list-style: none;
+}
+
+.history-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.history-card__date {
+  font-size: var(--fs-caption);
+  color: var(--color-soft-gray);
+}
+
+.history-card__rounds {
+  font-weight: 600;
+}
+
+.history-card__badge {
+  padding: 4px 14px;
+  border: 1px solid currentColor;
+  border-radius: var(--radius-button);
+  font-size: var(--fs-caption);
+  font-weight: 700;
+}
+
+.history-card[data-outcome='win'] .history-card__badge {
+  color: var(--color-green);
+}
+
+.history-card[data-outcome='loss'] .history-card__badge {
+  color: var(--color-red);
+}
