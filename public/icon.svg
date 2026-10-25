@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Full-bleed background so the icon also works as maskable -->
+  <rect width="512" height="512" fill="#0A1628"/>
+  <!-- Board frame (diameter ~78% of canvas, inside the maskable safe zone) -->
+  <circle cx="256" cy="256" r="200" fill="#0F0F0F"/>
+  <!-- Quadrants in the same layout as the game board -->
+  <path d="M256 256 L70 256 A186 186 0 0 1 256 70 Z" fill="#00D26A"/>
+  <path d="M256 256 L256 70 A186 186 0 0 1 442 256 Z" fill="#FF3B30"/>
+  <path d="M256 256 L442 256 A186 186 0 0 1 256 442 Z" fill="#00A3FF"/>
+  <path d="M256 256 L256 442 A186 186 0 0 1 70 256 Z" fill="#FFD600"/>
+  <!-- Thick separators and dark center disc -->
+  <rect x="245" y="60" width="22" height="392" fill="#0F0F0F"/>
+  <rect x="60" y="245" width="392" height="22" fill="#0F0F0F"/>
+  <circle cx="256" cy="256" r="66" fill="#0F0F0F"/>
+</svg>
