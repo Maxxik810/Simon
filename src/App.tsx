@@ -12,9 +12,8 @@ export default function App() {
   const game = useGame();
 
   function navigate(next: Screen) {
-    // Temporary Milestone 2 behavior: leaving mid-game cancels the game.
-    // Milestone 3 replaces this with a real pause.
-    if (next === 'about') game.abandonGame();
+    // Leaving mid-game pauses it; only "המשך משחק" resumes (ADR-3)
+    if (next === 'about') game.pauseGame();
     setScreen(next);
   }
 

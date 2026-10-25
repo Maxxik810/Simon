@@ -121,15 +121,75 @@ describe('gameReducer', () => {
     expect(next.sequence).toEqual(['blue']);
   });
 
-  it('abandon cancels an active game only', () => {
-    const playing = finishPresentation(reachRound(4));
-    const idle = gameReducer(playing, { type: 'abandon' });
-    expect(idle.status).toBe('idle');
-    expect(idle.round).toBe(1);
-    expect(idle.presentationId).toBeGreaterThan(playing.presentationId);
+  it('pause during the presentation keeps sequence and round and makes the old presentation stale', () => {
+    const presenting = reachRound(4);
+    const paused = gameReducer(presenting, { type: 'pause' });
+    expect(paused.status).toBe('paused');
+    expect(paused.sequence).toEqual(presenting.sequence);
+    expect(paused.round).toBe(4);
+    expect(paused.gameId).toBe(presenting.gameId);
+    expect(paused.presentationId).toBe(presenting.presentationId + 1);
+    expect(
+      gameReducer(paused, { type: 'presentationDone', presentationId: presenting.presentationId }),
+    ).toBe(paused);
+  });
 
-    const lost = gameReducer(playing, { type: 'press', color: 'yellow' });
-    expect(gameReducer(lost, { type: 'abandon' })).toBe(lost);
-    expect(gameReducer(initialGameState, { type: 'abandon' })).toBe(initialGameState);
+  it('pause during the player turn drops partial input', () => {
+    let state = finishPresentation(reachRound(4));
+    state = gameReducer(state, { type: 'press', color: state.sequence[0] });
+    state = gameReducer(state, { type: 'press', color: state.sequence[1] });
+    const paused = gameReducer(state, { type: 'pause' });
+    expect(paused.status).toBe('paused');
+    expect(paused.inputIndex).toBe(0);
+    expect(paused.round).toBe(4);
+  });
+
+  it('pause right after a completed round counts the round as not completed', () => {
+    const complete = repeatSequence(finishPresentation(reachRound(3)));
+    expect(isRoundComplete(complete)).toBe(true);
+    const paused = gameReducer(complete, { type: 'pause' });
+    expect(paused.round).toBe(3);
+    expect(paused.sequence).toHaveLength(3);
+    expect(paused.completedRounds).toBe(2);
+    expect(paused.inputIndex).toBe(0);
+    expect(gameReducer(paused, { type: 'nextRound', nextColor: 'red' })).toBe(paused);
+  });
+
+  it('pause does nothing when no game is active', () => {
+    expect(gameReducer(initialGameState, { type: 'pause' })).toBe(initialGameState);
+    const lost = gameReducer(finishPresentation(startGame('green')), { type: 'press', color: 'red' });
+    expect(gameReducer(lost, { type: 'pause' })).toBe(lost);
+    const won = repeatSequence(finishPresentation(reachRound(10)));
+    expect(gameReducer(won, { type: 'pause' })).toBe(won);
+    const paused = gameReducer(reachRound(2), { type: 'pause' });
+    expect(gameReducer(paused, { type: 'pause' })).toBe(paused);
+  });
+
+  it('ignores press, nextRound, start and dismiss while paused', () => {
+    const paused = gameReducer(finishPresentation(reachRound(2)), { type: 'pause' });
+    expect(gameReducer(paused, { type: 'press', color: 'green' })).toBe(paused);
+    expect(gameReducer(paused, { type: 'nextRound', nextColor: 'red' })).toBe(paused);
+    expect(gameReducer(paused, { type: 'start', firstColor: 'red' })).toBe(paused);
+    expect(gameReducer(paused, { type: 'dismiss' })).toBe(paused);
+  });
+
+  it('resume presents the same full sequence of the same round again', () => {
+    let state = finishPresentation(reachRound(5));
+    state = gameReducer(state, { type: 'press', color: state.sequence[0] });
+    const paused = gameReducer(state, { type: 'pause' });
+    const resumed = gameReducer(paused, { type: 'resume' });
+    expect(resumed.status).toBe('presenting');
+    expect(resumed.sequence).toEqual(state.sequence);
+    expect(resumed.round).toBe(5);
+    expect(resumed.inputIndex).toBe(0);
+    expect(resumed.presentationId).toBe(paused.presentationId + 1);
+    // Only from paused
+    expect(gameReducer(resumed, { type: 'resume' })).toBe(resumed);
+    expect(gameReducer(initialGameState, { type: 'resume' })).toBe(initialGameState);
+
+    // After the replay the player repeats the round from the start
+    const done = repeatSequence(finishPresentation(resumed));
+    expect(isRoundComplete(done)).toBe(true);
+    expect(done.completedRounds).toBe(5);
   });
 });

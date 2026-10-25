@@ -22,6 +22,8 @@ export default function HomeScreen({ game }: HomeScreenProps) {
   } else if (status === 'awaitingInput') {
     statusText = 'התור שלך';
     if (!roundComplete) hintText = 'הקש על הצבעים לפי הסדר';
+  } else if (status === 'paused') {
+    statusText = 'המשחק מושהה';
   }
 
   return (
@@ -38,7 +40,7 @@ export default function HomeScreen({ game }: HomeScreenProps) {
         <SimonBoard
           litColor={litColor}
           interactive={status === 'awaitingInput' && !roundComplete}
-          dimmed={status === 'presenting'}
+          dimmed={status === 'presenting' || status === 'paused'}
           onPressStart={game.pressStart}
           onPressEnd={game.pressEnd}
         />
@@ -53,6 +55,11 @@ export default function HomeScreen({ game }: HomeScreenProps) {
             התחל משחק
           </button>
         )}
+        {status === 'paused' && (
+          <button type="button" className="btn-primary" onClick={() => void game.resumeGame()}>
+            המשך משחק
+          </button>
+        )}
         {ended && resultVisible && (
           <button type="button" className="btn-primary" onClick={game.dismissResult}>
             אישור
@@ -61,7 +68,7 @@ export default function HomeScreen({ game }: HomeScreenProps) {
         {hintText && <p className="home__hint">{hintText}</p>}
       </div>
 
-      {status === 'idle' && audioError && (
+      {(status === 'idle' || status === 'paused') && audioError && (
         <p className="home__error" role="alert">
           לא הצלחנו להפעיל את הצלילים. נסו ללחוץ שוב.
         </p>

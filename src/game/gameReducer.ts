@@ -1,7 +1,7 @@
 import type { ColorId } from './colors';
 import { MAX_ROUNDS } from './timing';
 
-export type GameStatus = 'idle' | 'presenting' | 'awaitingInput' | 'won' | 'lost';
+export type GameStatus = 'idle' | 'presenting' | 'awaitingInput' | 'paused' | 'won' | 'lost';
 
 export type GameState = {
   status: GameStatus;
@@ -23,9 +23,8 @@ export type GameAction =
   | { type: 'press'; color: ColorId }
   | { type: 'nextRound'; nextColor: ColorId }
   | { type: 'dismiss' }
-  // Temporary for Milestone 2: leaving to "About" mid-game cancels the game.
-  // Replaced by a real pause in Milestone 3.
-  | { type: 'abandon' };
+  | { type: 'pause' }
+  | { type: 'resume' };
 
 export const initialGameState: GameState = {
   status: 'idle',
@@ -94,11 +93,25 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
       if (state.status !== 'won' && state.status !== 'lost') return state;
       return { ...initialGameState, gameId: state.gameId, presentationId: state.presentationId };
 
-    case 'abandon':
+    // ADR-3: keep sequence and round, drop partial input. A round that was
+    // just completed (waiting for the next one) counts as not completed.
+    case 'pause':
       if (state.status !== 'presenting' && state.status !== 'awaitingInput') return state;
       return {
-        ...initialGameState,
-        gameId: state.gameId,
+        ...state,
+        status: 'paused',
+        inputIndex: 0,
+        completedRounds: state.round - 1,
+        presentationId: state.presentationId + 1,
+      };
+
+    // Replays the full sequence of the same round as a new presentation
+    case 'resume':
+      if (state.status !== 'paused') return state;
+      return {
+        ...state,
+        status: 'presenting',
+        inputIndex: 0,
         presentationId: state.presentationId + 1,
       };
 

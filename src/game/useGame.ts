@@ -204,15 +204,44 @@ export function useGame() {
     dispatch({ type: 'dismiss' });
   }, []);
 
-  // Temporary Milestone 2 behavior: leaving to "About" mid-game cancels it
-  const abandonGame = useCallback(() => {
+  // ADR-3: "About", hiding the app and pagehide all pause an active game.
+  // Changing the status cancels the playback and next-round timers (effect cleanup).
+  const pauseGame = useCallback(() => {
     const status = stateRef.current.status;
     if (status !== 'presenting' && status !== 'awaitingInput') return;
     finishPress();
     stopAll();
     setPlaybackColor(null);
-    dispatch({ type: 'abandon' });
+    dispatch({ type: 'pause' });
   }, [finishPress]);
+
+  // Only a press on "המשך משחק" resumes; it replays the full sequence
+  const resumeGame = useCallback(async () => {
+    if (stateRef.current.status !== 'paused' || startingRef.current) return;
+    startingRef.current = true;
+    setAudioError(false);
+    // Called inside the button's gesture so the browser allows sound
+    const ok = await unlockAudio();
+    startingRef.current = false;
+    if (!ok) {
+      setAudioError(true);
+      return;
+    }
+    dispatch({ type: 'resume' });
+  }, []);
+
+  // Coming back to the app never resumes by itself
+  useEffect(() => {
+    const onVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') pauseGame();
+    };
+    document.addEventListener('visibilitychange', onVisibilityChange);
+    window.addEventListener('pagehide', pauseGame);
+    return () => {
+      document.removeEventListener('visibilitychange', onVisibilityChange);
+      window.removeEventListener('pagehide', pauseGame);
+    };
+  }, [pauseGame]);
 
   return {
     state,
@@ -222,7 +251,8 @@ export function useGame() {
     audioError,
     startGame,
     dismissResult,
-    abandonGame,
+    pauseGame,
+    resumeGame,
     pressStart,
     pressEnd,
   };
