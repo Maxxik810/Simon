@@ -1,0 +1,35 @@
+.result {
+  position: absolute;
+  inset: 12% 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-3);
+  background: rgba(18, 33, 58, 0.94);
+  border: 1px solid rgba(0, 163, 255, 0.55);
+  border-radius: var(--radius-card);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
+  text-align: center;
+}
+
+.result__title {
+  font-size: var(--fs-h1);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.result[data-outcome='won'] .result__title {
+  color: var(--color-green);
+}
+
+.result[data-outcome='lost'] .result__title {
+  color: var(--color-red);
+}
+
+.result__detail {
+  font-size: var(--fs-body);
+  color: var(--color-soft-gray);
+}

@@ -17,8 +17,25 @@
   color: var(--color-soft-gray);
 }
 
+.home__board {
+  position: relative;
+}
+
+/* Fixed height so the board does not jump between states */
 .home__actions {
   display: flex;
   justify-content: center;
+  align-items: center;
+  min-height: 52px;
   margin-top: var(--space-4);
+}
+
+.home__hint {
+  color: var(--color-soft-gray);
+}
+
+.home__error {
+  margin-top: var(--space-2);
+  color: var(--color-red);
+  font-size: var(--fs-caption);
 }

@@ -278,3 +278,8 @@ type HistoryData = {
 **הקשר:** המשתמש ביקש לינק חי שמתעדכן בכל דחיפה ומסופק בסוף כל שלב, בעוד ש-MILESTONES.md מתזמן את הפריסה ל-Milestone 5.
 **החלטה:** ה-Workflow `.github/workflows/deploy.yml` (לפי §2.9) נוסף כבר בשלב ההקמה ופורס כל Push ל-`main`. PWA, Manifest, Service Worker ו-Offline נשארים ב-Milestone 5.
 **השלכות:** כל Milestone נבדק גם בכתובת החיה. ב-Milestone 5 נשאר רק לוודא שה-Workflow עומד בכל סעיפי ה-Definition of Done ולהוסיף את ה-PWA.
+
+### ADR-11: מעבר שלב והשהיית הודעת הסיום מנוהלים ב-`useGame`, לא ב-Reducer
+**הקשר:** טבלת "קצב הצגת הרצף" (`DESIGN.md` §1.1) דורשת שנייה שבה השלב שהושלם נשאר על המסך לפני מעבר לשלב הבא, ושנייה בין הלחיצה האחרונה (נכונה בשלב 10 או שגויה) לבין הודעת הסיום והצליל. ה-Reducer צריך להישאר טהור, והשמירה להיסטוריה (Milestone 4) צריכה להתבצע ברגע הסיום.
+**החלטה:** שלב שהושלם מסומן ב-`awaitingInput` עם `inputIndex === sequence.length` (`isRoundComplete`); לחיצות נוספות מתעלמות, ו-`useGame` שולח `nextRound` אחרי `1000ms`. בסיום, ה-Reducer נכנס ל-`won`/`lost` מיד; `useGame` מציג את ההודעה, משמיע את צליל הסיום ומפעיל קונפטי (בניצחון) אחרי `1000ms` דרך `resultVisible`. כל הצגת רצף מתוזמנת מראש כרשימת Timers שמבוטלת ב-Cleanup של ה-Effect, ו-`presentationDone` נושא `presentationId` כדי שסיום הצגה ישן יתעלם.
+**השלכות:** אין מצב נוסף ב-State machine. ניווט ל"אודות" מבטל את כל ה-Timers דרך שינוי המצב (`abandon`) ו-`stopAll()`. בבדיקות עם Fake Timers יש לקדם את הזמן בצעדים נפרדים בכל מעבר מצב, כי Effects חדשים נרשמים רק אחרי Render.

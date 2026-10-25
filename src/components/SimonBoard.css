@@ -22,10 +22,56 @@
 }
 
 .board__quadrant {
+  position: relative;
   padding: 0;
   border: none;
   cursor: pointer;
   box-shadow: inset 0 -8px 16px rgba(0, 0, 0, 0.18);
+  transition:
+    filter 80ms ease-out,
+    box-shadow 80ms ease-out;
+  touch-action: none;
+}
+
+/* Not the player's turn: no pointer cursor, colors stay full unless dimmed */
+.board__quadrant:disabled {
+  cursor: default;
+}
+
+/* Sequence playback: unlit quadrants are dimmed (DESIGN 1.1) */
+.board[data-dimmed='true'] .board__quadrant:not([data-lit]) {
+  filter: brightness(0.45) saturate(0.7);
+}
+
+/* Lit quadrant: bright with a focused glow */
+.board__quadrant[data-lit] {
+  z-index: 1;
+  filter: brightness(1.3) saturate(1.1);
+  box-shadow:
+    0 0 22px 6px var(--glow),
+    inset 0 0 18px rgba(255, 255, 255, 0.55);
+}
+
+.board__quadrant[data-color='green'] {
+  --glow: rgba(0, 210, 106, 0.85);
+}
+
+.board__quadrant[data-color='red'] {
+  --glow: rgba(255, 59, 48, 0.85);
+}
+
+.board__quadrant[data-color='yellow'] {
+  --glow: rgba(255, 214, 0, 0.85);
+}
+
+.board__quadrant[data-color='blue'] {
+  --glow: rgba(0, 163, 255, 0.85);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .board__quadrant {
+    transition: none;
+  }
 }
 
 .board__quadrant[data-position='top-left'] {

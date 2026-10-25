@@ -1,21 +1,71 @@
 import ScreenHeader from '../components/ScreenHeader';
 import SimonBoard from '../components/SimonBoard';
+import ResultOverlay from '../components/ResultOverlay';
+import type { GameController } from '../game/useGame';
+import { MAX_ROUNDS } from '../game/timing';
 import './HomeScreen.css';
 
-// Milestone 1: the "before game" state only. The start button has no action yet.
-export default function HomeScreen() {
+type HomeScreenProps = {
+  game: GameController;
+};
+
+export default function HomeScreen({ game }: HomeScreenProps) {
+  const { state, roundComplete, litColor, resultVisible, audioError } = game;
+  const { status } = state;
+  const ended = status === 'won' || status === 'lost';
+
+  let statusText = '';
+  let hintText = '';
+  if (status === 'presenting') {
+    statusText = 'המשחק מציג את הרצף';
+    hintText = 'המתן…';
+  } else if (status === 'awaitingInput') {
+    statusText = 'התור שלך';
+    if (!roundComplete) hintText = 'הקש על הצבעים לפי הסדר';
+  }
+
   return (
     <div className="home">
       <ScreenHeader title="סיימון" />
-      <p className="home__stage">שלב 1 מתוך 10</p>
-      {/* Reserved for status text ("the game is showing the sequence", "your turn") */}
-      <p className="home__status" aria-live="polite" />
-      <SimonBoard />
-      <div className="home__actions">
-        <button type="button" className="btn-primary">
-          התחל משחק
-        </button>
+      <p className="home__stage">
+        {`שלב ${state.round} מתוך ${MAX_ROUNDS}`}
+      </p>
+      <p className="home__status" aria-live="polite">
+        {statusText}
+      </p>
+
+      <div className="home__board">
+        <SimonBoard
+          litColor={litColor}
+          interactive={status === 'awaitingInput' && !roundComplete}
+          dimmed={status === 'presenting'}
+          onPressStart={game.pressStart}
+          onPressEnd={game.pressEnd}
+        />
+        {ended && resultVisible && (
+          <ResultOverlay outcome={status} completedRounds={state.completedRounds} />
+        )}
       </div>
+
+      <div className="home__actions">
+        {status === 'idle' && (
+          <button type="button" className="btn-primary" onClick={() => void game.startGame()}>
+            התחל משחק
+          </button>
+        )}
+        {ended && resultVisible && (
+          <button type="button" className="btn-primary" onClick={game.dismissResult}>
+            אישור
+          </button>
+        )}
+        {hintText && <p className="home__hint">{hintText}</p>}
+      </div>
+
+      {status === 'idle' && audioError && (
+        <p className="home__error" role="alert">
+          לא הצלחנו להפעיל את הצלילים. נסו ללחוץ שוב.
+        </p>
+      )}
     </div>
   );
 }
