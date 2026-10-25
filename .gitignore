@@ -48,3 +48,6 @@ desktop.ini
 *.swp
 *.swo
 *~
+
+# Milestone build zips (created locally, not tracked)
+builds/
